@@ -147,3 +147,13 @@ textarea:focus {
 .issue-table th:nth-child(3) {
     min-width: 600px;
 }
+
+.login-error {
+    color: #8b0000;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #ffc0cb;
+    border: 2px solid #ffb6c1;
+}
