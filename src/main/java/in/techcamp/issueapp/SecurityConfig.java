@@ -15,9 +15,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                        .requestMatchers("/css/**","/").permitAll()
+                        .requestMatchers("/css/**","/","/loginForm").permitAll()
                         .anyRequest().authenticated())
                 .formLogin(login -> login
+                        .loginProcessingUrl("/login")
                         .loginPage("/loginForm")
                         .defaultSuccessUrl("/")
                         .failureUrl("/login?error")
