@@ -15,9 +15,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                        .requestMatchers("/css/**","/").permitAll()//ここに記載したパスは全てのユーザーに許可
+                        .requestMatchers("/css/**","/").permitAll()
                         .anyRequest().authenticated())
                 .formLogin(login -> login
+                        .loginPage("/loginForm")
                         .defaultSuccessUrl("/")
                         .failureUrl("/login?error")
                         .permitAll())
