@@ -1,6 +1,6 @@
-package in.techcamp.issueapp;
+package in.techcamp.issueapp.repository;
 
-import in.techcamp.issueapp.IssueForm;
+import in.techcamp.issueapp.entity.IssueEntity;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;

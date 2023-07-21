@@ -1,5 +1,7 @@
-package in.techcamp.issueapp;
+package in.techcamp.issueapp.controller;
 
+import in.techcamp.issueapp.IssueForm;
+import in.techcamp.issueapp.repository.IssueRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
