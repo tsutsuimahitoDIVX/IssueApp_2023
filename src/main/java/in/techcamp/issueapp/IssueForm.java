@@ -7,5 +7,5 @@ public class IssueForm {
     String title;
     String content;
     String period;
-    char importance;
+    Character importance;
 }
