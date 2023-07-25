@@ -14,7 +14,7 @@
 </div>
 
 <div class="form">
-    <form action="#" th:action="@{/issues/{issueId}/update(issueId=${issue.getId()})}" th:method="post" th:object="${issue}">
+    <form action="#" th:action="@{/user/{userId}/issue/{issueId}/update(userId=${issue.user.id},issueId=${issue.getId()})}" th:method="post" th:object="${issue}">
         <div class="form_title">
             <h2>タイトル</h2>
             <input type="text" id="title" th:field="*{title}">
