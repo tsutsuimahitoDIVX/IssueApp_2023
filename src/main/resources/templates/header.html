@@ -6,15 +6,18 @@
     <div class="header-container">
         <a class="app-name" th:href="@{/}">IssueApp</a>
 
-            <div class="user-info"  th:if="${#authorization.expression('isAuthenticated()')}"> <!-- ログイン時 -->
-                <p><span th:text="${#authentication?.name}"></span>さん</p>
-                <form th:action="@{/logout}" method="post">
-                    <input type="submit" value="ログアウト"/>
-                </form>
-            </div>
-            <div class="login-info" th:if="${#authorization.expression('!isAuthenticated()')}"> <!-- 非ログイン時 -->
-                <a th:href="@{/login}">ログイン</a>
-            </div>
+        <!-- ログイン時 -->
+        <div class="user-info"  th:if="${#authorization.expression('isAuthenticated()')}">
+            <p><span th:text="${#authentication?.name}"></span>さん</p>
+            <form th:action="@{/logout}" method="post">
+                <input type="submit" value="ログアウト"/>
+            </form>
+        </div>
+
+        <!-- 非ログイン時 -->
+        <div class="login-info" th:if="${#authorization.expression('!isAuthenticated()')}">
+            <a th:href="@{/login}">ログイン</a>
+        </div>
 
     </div>
 </header>
