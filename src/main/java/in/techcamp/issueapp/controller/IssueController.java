@@ -15,6 +15,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @AllArgsConstructor
 public class IssueController {
@@ -27,8 +29,8 @@ public class IssueController {
     private IssueService issueService;
 
     @GetMapping("/")
-    public String showIndex(Model model){
-        var issueList = issueRepository.findAll();
+    public String getIndex(Model model){
+        List<IssueEntity> issueList = issueRepository.findAll();
         model.addAttribute("issueList", issueList);
         return "index";
     }
@@ -100,7 +102,7 @@ public class IssueController {
 
 //    イシュー削除機能
     @PostMapping("/user/{userId}/issue/{issueId}/delete")
-    public String deleteMemo(Authentication authentication,
+    public String delete(Authentication authentication,
                              @PathVariable("userId") Integer userId,
                              @PathVariable("issueId") Integer issueId)
     {

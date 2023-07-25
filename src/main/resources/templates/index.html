@@ -30,7 +30,7 @@
 
 <table class="issue-table">
   <tr>
-    <th>id</th>
+    <th>投稿者</th>
     <th>タイトル</th>
     <th>内容</th>
     <th>期限</th>
@@ -39,7 +39,7 @@
   </tr>
 
     <tr th:each="issue:${issueList}">
-      <td th:text="${issue.getId()}"></td>
+      <td th:text="${issue.user.getUsername()}"></td>
       <td><a th:text="${issue.getTitle()}" th:href="@{/user/{userId}/issue/{issueId}/edit(userId=${issue.user.id}, issueId=${issue.id})}"></a></td>
       <td th:text="${issue.getContent()}"></td>
       <td th:text="${issue.getPeriod()}"></td>
