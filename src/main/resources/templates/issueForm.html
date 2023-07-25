@@ -15,7 +15,7 @@
 </div>
 
 <div class="form">
-    <form action="#" th:action="@{/issues}" th:method="post" th:object="${issueForm}">
+    <form action="#" th:action="@{/issues}" th:method="post" th:object="${issueEntity}">
         <div class="form_title">
             <h2 class="column-title">タイトル</h2>
             <input type="text" id="title" th:field="*{title}">

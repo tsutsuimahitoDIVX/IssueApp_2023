@@ -1,5 +1,5 @@
 create table if not exists issues (
-    id bigint not null primary key auto_increment,
+    id bigint not null auto_increment,
     title varchar(256) not null,
     content varchar(256) not null,
     period varchar(256) not null,
@@ -10,9 +10,9 @@ create table if not exists issues (
  );
 
  CREATE TABLE IF NOT EXISTS user (
-    id        INTEGER         NOT NULL AUTO_INCREMENT,
+    id       INT             NOT NULL AUTO_INCREMENT,
     username VARCHAR(128)    NOT NULL,
-    password   VARCHAR(512)    NOT NULL,
+    password VARCHAR(512)    NOT NULL,
     PRIMARY KEY (id)
  );
 
