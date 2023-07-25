@@ -3,7 +3,10 @@ create table if not exists issues (
     title varchar(256) not null,
     content varchar(256) not null,
     period varchar(256) not null,
-    importance varchar(256) not null
+    importance varchar(256) not null,
+    user_id Integer not null,
+    primary key (id),
+    foreign key (user_id) references user(id)
  );
 
  CREATE TABLE IF NOT EXISTS user (
