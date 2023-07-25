@@ -37,14 +37,18 @@
     <th>重要度</th>
     <th class="header-delete">削除</th>
   </tr>
-  <form method="post">
+
     <tr th:each="issue:${issueList}">
       <td th:text="${issue.getId()}"></td>
       <td><a th:text="${issue.getTitle()}" th:href="@{/user/{userId}/issue/{issueId}/edit(userId=${issue.user.id}, issueId=${issue.id})}"></a></td>
       <td th:text="${issue.getContent()}"></td>
       <td th:text="${issue.getPeriod()}"></td>
       <td th:text="${issue.getImportance()}"></td>
-      <td><button type="submit" th:formaction="@{/issues/{id}/delete(id=${issue.getId()})}">削除</button></td>
+      <td>
+        <form th:action="@{/user/{userId}/issue/{issueId}/delete(userId=${issue.user.id}, issueId=${issue.id})}" method="post">
+          <button type="submit">削除</button>
+        </form>
+      </td>
     </tr>
   </form>
 </table>
