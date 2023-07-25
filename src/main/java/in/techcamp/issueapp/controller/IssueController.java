@@ -47,7 +47,7 @@ public class IssueController {
     }
 
     @PostMapping("issues/{id}/delete")
-    public String deleteIssue(@PathVariable Long id) {
+    public String deleteIssue(@PathVariable long id) {
         issueRepository.deleteById(id);
         return "redirect:/";
     }

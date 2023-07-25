@@ -8,9 +8,17 @@
 
 <body>
 
-<header>
-  <a th:href="@{/}">IssueApp</a>
-</header>
+<!--<header>-->
+<!--  <a th:href="@{/}">IssueApp</a>-->
+<!--  <form th:action="@{/logout}" method="post">-->
+<!--    <input type="submit" value="logout"/>-->
+<!--  </form>-->
+<!--  <p>Logged in as: <span th:text="${#authentication?.name}"></span></p>-->
+
+
+<!--</header>-->
+
+<div th:insert="header :: header"></div>
 
 <div class="page-title">
   <h1>イシュー一覧</h1>
