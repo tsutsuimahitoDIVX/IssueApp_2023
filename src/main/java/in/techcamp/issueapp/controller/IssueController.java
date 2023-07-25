@@ -1,6 +1,5 @@
 package in.techcamp.issueapp.controller;
 
-import in.techcamp.issueapp.IssueForm;
 import in.techcamp.issueapp.entity.IssueEntity;
 import in.techcamp.issueapp.entity.UserEntity;
 import in.techcamp.issueapp.repository.IssueRepository;
@@ -99,10 +98,31 @@ public class IssueController {
     return "redirect:/";
 }
 
+//    イシュー削除機能
+    @PostMapping("/user/{userId}/issue/{issueId}/delete")
+    public String deleteMemo(Authentication authentication,
+                             @PathVariable("userId") Integer userId,
+                             @PathVariable("issueId") Integer issueId)
+    {
+        // 現在認証されているユーザー名を取得
+        String username = authentication.getName();
 
-//    @PostMapping("issues/{id}/delete")
-//    public String deleteIssue(@PathVariable long id) {
-//        issueRepository.deleteById(id);
-//        return "redirect:/";
-//    }
+        // 該当のメモとアカウントを取得
+        IssueEntity issue = issueRepository.findById(issueId).orElseThrow(() -> new EntityNotFoundException("Memo not found: " + issueId));
+        UserEntity user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("Memo not found: " + userId));
+
+        // ユーザーチェック
+        if (user.getUsername().equals(username)) {
+            // イシューを削除
+
+            issueRepository.deleteById(issueId);
+        }
+        else {
+            // エラーメッセージを設定したり、エラーページにリダイレクトしたりします。
+        }
+
+        // 更新後のページにリダイレクト
+
+        return "redirect:/";
+    }
 }
