@@ -23,17 +23,30 @@
   </form>
 </div>
 
-<p>コメント一覧</p>
-<div th:each="comment : ${comments}">
-  <p th:text="${comment.message}"></p>
-  <p th:text="${comment.user.username}"></p>
-  <div th:if="${#authentication.name == comment.user.username}">
-    <a class="button" th:href="@{/issue/{issueId}/comment/{commentId}/edit(issueId=${issue.id},commentId=${comment.id})}">更新</a>
-    <form th:action="@{/issue/{issueId}/comment/{commentId}/delete(issueId=${issue.id},commentId=${comment.id})}" method="post">
-      <input type="submit" value="削除">
-    </form>
-  </div>
+<div class="page-title">
+  <h2>コメント</h2>
 </div>
+
+<table class="comment-table" th:fragment="issueList(issue)">
+  <tr>
+    <th>ID</th>
+    <th>投稿者</th>
+    <th>メッセージ</th>
+    <th>更新</th>
+    <th>削除</th>
+  </tr>
+  <tr th:each="comment:${comments}">
+    <td th:text="${comment.id}"></td>
+    <td th:text="${comment.user.username}"></td>
+    <td th:text="${comment.message}"></td>
+    <div th:if="${#authentication.name == comment.user.username}">
+      <td><a class="update-button" th:href="@{/issue/{issueId}/comment/{commentId}/edit(issueId=${issue.id},commentId=${comment.id})}">更新</a></td>
+      <form th:action="@{/issue/{issueId}/comment/{commentId}/delete(issueId=${issue.id},commentId=${comment.id})}" method="post">
+        <td><input class="delete-button" type="submit" value="削除"></td>
+      </form>
+    </div>
+  </tr>
+</table>
 
 <div th:if="${#authentication.name != 'anonymousUser'}">
   <!-- ログイン済みユーザーの場合のみ表示 -->
