@@ -47,7 +47,7 @@ public class UserController {
             return"register";
         }
 
-        userService.registerNewUser(userInput);  // UserServiceのregisterNewUserメソッドを呼び出す
+        userService.registerNewUser(userInput);
         return "redirect:/";
     }
 
