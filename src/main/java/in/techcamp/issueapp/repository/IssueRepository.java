@@ -3,7 +3,10 @@ package in.techcamp.issueapp.repository;
 import in.techcamp.issueapp.entity.IssueEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface IssueRepository extends JpaRepository<IssueEntity, Integer> {
+    List<IssueEntity> findByUser_Id(Integer userId);
 }
 
 //@Mapper

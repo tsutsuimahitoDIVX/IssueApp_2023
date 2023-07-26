@@ -175,8 +175,48 @@ textarea:focus {
     color: #FFFFFF;
 }
 
-.issue-table th:nth-child(3) {
+.issue-table th:nth-child(4) {
     min-width: 600px;
+}
+
+/********************************************
+ イシュー詳細画面
+*********************************************/
+.button {
+    display: flex;
+    margin-top: 30px;
+    justify-content: center;
+}
+
+.update-button {
+   display: block;
+       width: 100px;
+       height: 40px;
+       border: 1px solid #2c3e50;
+       border-radius: 5px;
+       padding: 5px;
+       margin-right: 10px;
+       text-decoration: none;
+       text-align: center;
+       color: #2c3e50;
+       font-size: 18px;
+       font-weight: bold;
+}
+
+.delete-button {
+   display: block;
+       width: 100px;
+       height: 40px;
+       border: 1px solid #2c3e50;
+       border-radius: 5px;
+       padding: 5px;
+       margin-left:10px;
+       text-align: center;
+       color: #2c3e50;
+       font-size: 18px;
+       font-weight: bold;
+       cursor: pointer;
+       background-color: #FFFFFF;
 }
 
 .login-error {
