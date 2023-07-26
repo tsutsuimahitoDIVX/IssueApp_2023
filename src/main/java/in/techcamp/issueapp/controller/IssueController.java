@@ -6,7 +6,6 @@ import in.techcamp.issueapp.repository.IssueRepository;
 import in.techcamp.issueapp.repository.UserRepository;
 import in.techcamp.issueapp.service.IssueService;
 import jakarta.persistence.EntityNotFoundException;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
@@ -18,9 +17,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@AllArgsConstructor
 public class IssueController {
-    private final IssueRepository issueRepository;
+
+    @Autowired
+    private IssueRepository issueRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -31,7 +31,7 @@ public class IssueController {
     @GetMapping("/")
     public String getIndex(Model model){
         List<IssueEntity> issueList = issueRepository.findAll();
-        model.addAttribute("issueList", issueList);
+        model.addAttribute("issue", issueList);
         return "index";
     }
 
@@ -126,5 +126,12 @@ public class IssueController {
         // 更新後のページにリダイレクト
 
         return "redirect:/";
+    }
+
+    @GetMapping("/issue/{issueId}")
+    public String showIssueDetail(@PathVariable("issueId") Integer issueId,Model model){
+        IssueEntity issue = issueRepository.findById(issueId).orElseThrow(() -> new EntityNotFoundException("Memo not found: " + issueId));
+        model.addAttribute("issue",issue);
+        return "issueDetail";
     }
 }
