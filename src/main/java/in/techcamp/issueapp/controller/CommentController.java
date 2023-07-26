@@ -10,8 +10,11 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class CommentController {
@@ -39,6 +42,41 @@ public class CommentController {
         comment.setIssue(issue);
 
         commentRepository.save(comment);
+
+        return "redirect:/issue/{issueId}";
+    }
+
+    @GetMapping("issue/{issueId}/comment/{commentId}/edit")
+    public String commentEdit(@PathVariable("issueId")Integer issueId,
+                              @PathVariable("commentId")Integer commentId,
+                              Model model) {
+        CommentEntity comment = commentRepository.findById(commentId).orElseThrow(() -> new EntityNotFoundException("Comment not found: " + commentId));
+        IssueEntity issue = issueRepository.findById(issueId).orElseThrow(() -> new EntityNotFoundException("Issue not found: " + issueId));
+        model.addAttribute("comment",comment);
+        model.addAttribute("issue",issue);
+
+        return "commentEdit";
+    }
+
+    @PostMapping("issue/{issueId}/comment/{commentId}/update")
+    public String commentUpdate(@PathVariable("issueId")Integer issueId,
+                                @PathVariable("commentId")Integer commentId,
+                                @RequestParam("message") String newMessage,
+                                Authentication authentication) {
+        String username = authentication.getName();
+        UserEntity user = userRepository.findByUsername(username);
+        CommentEntity comment = commentRepository.findById(commentId).orElseThrow(() -> new EntityNotFoundException("Comment not found: " + commentId));
+
+        if (user.getUsername().equals(username)) {
+            // メモを更新
+            comment.setMessage(newMessage);
+            commentRepository.save(comment);
+        }
+        else {
+            // エラーメッセージを設定したり、エラーページにリダイレクトしたりします。
+        }
+
+        // 更新後のページにリダイレクト
 
         return "redirect:/issue/{issueId}";
     }
