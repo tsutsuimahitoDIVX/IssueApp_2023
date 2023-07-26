@@ -21,6 +21,6 @@ public class IssueEntity {
     @ManyToOne
     private UserEntity user;
 
-    @OneToMany(mappedBy = "memo",cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "issue",cascade = CascadeType.REMOVE)
     private List<CommentEntity> comments;
 }
