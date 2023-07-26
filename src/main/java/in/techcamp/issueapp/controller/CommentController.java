@@ -36,7 +36,7 @@ public class CommentController {
         String username = authentication.getName();
         UserEntity user = userRepository.findByUsername(username);
 
-        IssueEntity issue = issueRepository.findById(issueId).orElseThrow(() -> new EntityNotFoundException("Memo not found: " + issueId));
+        IssueEntity issue = issueRepository.findById(issueId).orElseThrow(() -> new EntityNotFoundException("Issue not found: " + issueId));
 
         comment.setUser(user);
         comment.setIssue(issue);

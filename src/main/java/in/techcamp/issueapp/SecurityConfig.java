@@ -1,5 +1,6 @@
 package in.techcamp.issueapp;
 
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.context.annotation.Bean;
@@ -17,7 +18,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                        .requestMatchers("/css/**", "/", "/loginForm","/issue/**").permitAll()
+                        .requestMatchers("/css/**", "/", "/loginForm","/issue/**","/registerForm").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/register/**").permitAll()
                         .anyRequest().authenticated())
                 .formLogin(login -> login
                         .loginProcessingUrl("/login")
