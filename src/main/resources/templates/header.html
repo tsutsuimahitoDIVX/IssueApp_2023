@@ -5,16 +5,17 @@
         <a class="app-name" th:href="@{/}">IssueApp</a>
 
         <!-- ログイン時 -->
-        <div class="user-info"  th:if="${#authorization.expression('isAuthenticated()')}">
-            <p><span th:text="${#authentication?.name}"></span>さん</p>
+        <div class="header-info"  th:if="${#authorization.expression('isAuthenticated()')}">
+            <p><span class="user-name" th:text="${#authentication?.name}"></span>さん</p>
             <form th:action="@{/logout}" method="post">
-                <input type="submit" value="ログアウト"/>
+                <input class="logout-button" type="submit" value="ログアウト"/>
             </form>
         </div>
 
         <!-- 非ログイン時 -->
-        <div class="login-info" th:if="${#authorization.expression('!isAuthenticated()')}">
-            <a th:href="@{/login}">ログイン</a>
+        <div class="header-info" th:if="${#authorization.expression('!isAuthenticated()')}">
+            <a class="header-button" th:href="@{/registerForm}">新規登録</a>
+            <a class="header-button" th:href="@{/login}">ログイン</a>
         </div>
 
     </div>

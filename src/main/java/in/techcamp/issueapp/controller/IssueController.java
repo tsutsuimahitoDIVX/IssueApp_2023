@@ -62,9 +62,9 @@ public class IssueController {
     @GetMapping("/user/{userId}/issue/{issueId}/edit")
     public String edit(@PathVariable Integer userId, @PathVariable Integer issueId, Model model) {
         UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("Account not found: " + userId));
+                .orElseThrow(() -> new IllegalArgumentException("User not found: " + userId));
         IssueEntity issue = issueRepository.findById(issueId)
-                .orElseThrow(() -> new IllegalArgumentException("Memo not found: " + issueId));
+                .orElseThrow(() -> new IllegalArgumentException("Issue not found: " + issueId));
 
         model.addAttribute("user", user);
         model.addAttribute("issue", issue);
@@ -85,8 +85,8 @@ public class IssueController {
         String username = authentication.getName();
 
         // 該当のイシューとアカウントを取得
-        IssueEntity issue = issueRepository.findById(issueId).orElseThrow(() -> new EntityNotFoundException("Memo not found: " + issueId));
-        UserEntity user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("Memo not found: " + userId));
+        IssueEntity issue = issueRepository.findById(issueId).orElseThrow(() -> new EntityNotFoundException("Issue not found: " + issueId));
+        UserEntity user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found: " + userId));
 
         // ユーザーチェック
         if (user.getUsername().equals(username)) {
@@ -114,8 +114,8 @@ public class IssueController {
         String username = authentication.getName();
 
         // 該当のメモとアカウントを取得
-        IssueEntity issue = issueRepository.findById(issueId).orElseThrow(() -> new EntityNotFoundException("Memo not found: " + issueId));
-        UserEntity user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("Memo not found: " + userId));
+        IssueEntity issue = issueRepository.findById(issueId).orElseThrow(() -> new EntityNotFoundException("Issue not found: " + issueId));
+        UserEntity user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found: " + userId));
 
         // ユーザーチェック
         if (user.getUsername().equals(username)) {
@@ -134,7 +134,7 @@ public class IssueController {
     //    イシュー詳細表示
     @GetMapping("/issue/{issueId}")
     public String showIssueDetail(@PathVariable("issueId") Integer issueId, @ModelAttribute("comment") CommentEntity comment, Model model) {
-        IssueEntity issue = issueRepository.findById(issueId).orElseThrow(() -> new EntityNotFoundException("Memo not found: " + issueId));
+        IssueEntity issue = issueRepository.findById(issueId).orElseThrow(() -> new EntityNotFoundException("Issue not found: " + issueId));
         List<CommentEntity> comments = commentRepository.findByIssue_id(issueId);
         model.addAttribute("issue", issue);
         model.addAttribute("comments",comments);
@@ -144,7 +144,7 @@ public class IssueController {
     //    イシュー投稿ユーザー別一覧表示
     @GetMapping("user/{userId}/issues")
     public String getUserIssues(@PathVariable("userId") Integer userId, Model model) {
-        UserEntity user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("Memo not found: " + userId));
+        UserEntity user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found: " + userId));
         List<IssueEntity> issues = issueRepository.findByUser_Id(userId);
         model.addAttribute("user", user);
         model.addAttribute("issue", issues);

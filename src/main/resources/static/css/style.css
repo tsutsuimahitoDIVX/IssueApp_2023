@@ -48,10 +48,10 @@ header {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
+    font-size: 20px;
 }
 
 header a {
-    font-size: 16px;
     color: #FFFFFF;
     text-decoration: none;
 }
@@ -62,17 +62,49 @@ header a {
 }
 
 
-.user-info {
-  width: 15%;
-  display: flex;
-  margin-right: 20px;
-  align-items: center;
-  justify-content: space-between;
-  color: #FFFFFF;
+.header-info {
+    width: 15%;
+    display: flex;
+    margin-right: 20px;
+    align-items: center;
+    justify-content: space-between;
+    color: #FFFFFF;
 }
 
-.login-info {
-  margin-right: 20px;
+.header-button {
+    display: block;
+    width: 100px;
+    height: 35px;
+    line-height: 35px;
+    border: 1px solid #2c3e50;
+    border-radius: 5px;
+    margin-right: 10px;
+    text-decoration: none;
+    text-align: center;
+    color: #2c3e50;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #FFFFFF;
+}
+
+.logout-button {
+    display: block;
+    width: 100px;
+    height: 35px;
+    border: 1px solid #2c3e50;
+    border-radius: 5px;
+    margin-right:10px;
+    text-align: center;
+    color: #2c3e50;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    background-color: #FFFFFF;
+}
+
+.user-name {
+    font-size: 16px;
+    font-weight: bold;
 }
 
 
@@ -189,34 +221,34 @@ textarea:focus {
 }
 
 .update-button {
-   display: block;
-       width: 100px;
-       height: 40px;
-       border: 1px solid #2c3e50;
-       border-radius: 5px;
-       padding: 5px;
-       margin-right: 10px;
-       text-decoration: none;
-       text-align: center;
-       color: #2c3e50;
-       font-size: 18px;
-       font-weight: bold;
+    display: block;
+    width: 100px;
+    height: 40px;
+    border: 1px solid #2c3e50;
+    border-radius: 5px;
+    padding: 5px;
+    margin-right: 10px;
+    text-decoration: none;
+    text-align: center;
+    color: #2c3e50;
+    font-size: 18px;
+    font-weight: bold;
 }
 
 .delete-button {
-   display: block;
-       width: 100px;
-       height: 40px;
-       border: 1px solid #2c3e50;
-       border-radius: 5px;
-       padding: 5px;
-       margin-left:10px;
-       text-align: center;
-       color: #2c3e50;
-       font-size: 18px;
-       font-weight: bold;
-       cursor: pointer;
-       background-color: #FFFFFF;
+    display: block;
+    width: 100px;
+    height: 40px;
+    border: 1px solid #2c3e50;
+    border-radius: 5px;
+    padding: 5px;
+    margin-left:10px;
+    text-align: center;
+    color: #2c3e50;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    background-color: #FFFFFF;
 }
 
 .login-error {
