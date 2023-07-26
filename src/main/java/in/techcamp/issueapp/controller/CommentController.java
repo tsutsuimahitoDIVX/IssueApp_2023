@@ -46,6 +46,7 @@ public class CommentController {
         return "redirect:/issue/{issueId}";
     }
 
+//    コメント編集機能（編集フォーム遷移
     @GetMapping("issue/{issueId}/comment/{commentId}/edit")
     public String commentEdit(@PathVariable("issueId")Integer issueId,
                               @PathVariable("commentId")Integer commentId,
@@ -58,6 +59,7 @@ public class CommentController {
         return "commentEdit";
     }
 
+//    コメント編集機能（ロジック
     @PostMapping("issue/{issueId}/comment/{commentId}/update")
     public String commentUpdate(@PathVariable("issueId")Integer issueId,
                                 @PathVariable("commentId")Integer commentId,
@@ -75,8 +77,25 @@ public class CommentController {
         else {
             // エラーメッセージを設定したり、エラーページにリダイレクトしたりします。
         }
-
         // 更新後のページにリダイレクト
+        return "redirect:/issue/{issueId}";
+    }
+
+//    コメント削除機能
+    @PostMapping("issue/{issueId}/comment/{commentId}/delete")
+    public String commentDelete(@PathVariable("issueId")Integer issueId,
+                                @PathVariable("commentId")Integer commentId,
+                                Authentication authentication){
+        String username = authentication.getName();
+        UserEntity user = userRepository.findByUsername(username);
+
+        if (user.getUsername().equals(username)) {
+
+            commentRepository.deleteById(commentId);
+        }
+        else {
+            // エラーメッセージを設定したり、エラーページにリダイレクトしたりします。
+        }
 
         return "redirect:/issue/{issueId}";
     }
