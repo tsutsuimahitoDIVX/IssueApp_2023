@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @Table(name = "issues")
 @Entity
@@ -18,4 +20,7 @@ public class IssueEntity {
 
     @ManyToOne
     private UserEntity user;
+
+    @OneToMany(mappedBy = "issue",cascade = CascadeType.REMOVE)
+    private List<CommentEntity> comments;
 }

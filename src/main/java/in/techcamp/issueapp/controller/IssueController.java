@@ -1,7 +1,9 @@
 package in.techcamp.issueapp.controller;
 
+import in.techcamp.issueapp.entity.CommentEntity;
 import in.techcamp.issueapp.entity.IssueEntity;
 import in.techcamp.issueapp.entity.UserEntity;
+import in.techcamp.issueapp.repository.CommentRepository;
 import in.techcamp.issueapp.repository.IssueRepository;
 import in.techcamp.issueapp.repository.UserRepository;
 import in.techcamp.issueapp.service.IssueService;
@@ -26,25 +28,28 @@ public class IssueController {
     private UserRepository userRepository;
 
     @Autowired
+    private CommentRepository commentRepository;
+
+    @Autowired
     private IssueService issueService;
 
-//    イシュー一覧表示
+    //    イシュー一覧表示
     @GetMapping("/")
-    public String getIndex(Model model){
+    public String getIndex(Model model) {
         List<IssueEntity> issueList = issueRepository.findAll();
         model.addAttribute("issue", issueList);
         return "index";
     }
 
-//    イシュー投稿機能（フォーム画面遷移
+    //    イシュー投稿機能（フォーム画面遷移
     @GetMapping("/issueForm")
-    public String showIssueForm(@ModelAttribute("issueEntity") IssueEntity issueEntity ){
+    public String showIssueForm(@ModelAttribute("issueEntity") IssueEntity issueEntity) {
         return "issueForm";
     }
 
-//    イシュー投稿機能（ロジック
+    //    イシュー投稿機能（ロジック
     @PostMapping("/issues")
-    public String postIssue(@ModelAttribute("issueEntity")IssueEntity issueEntity, BindingResult result, Authentication authentication){
+    public String postIssue(@ModelAttribute("issueEntity") IssueEntity issueEntity, BindingResult result, Authentication authentication) {
         User authenticatedUser = (User) authentication.getPrincipal();
         String username = authenticatedUser.getUsername();
         UserEntity user = userRepository.findByUsername(username);
@@ -53,7 +58,7 @@ public class IssueController {
         return "redirect:/";
     }
 
-//    イシュー更新機能（画面遷移）
+    //    イシュー更新機能（画面遷移）
     @GetMapping("/user/{userId}/issue/{issueId}/edit")
     public String edit(@PathVariable Integer userId, @PathVariable Integer issueId, Model model) {
         UserEntity user = userRepository.findById(userId)
@@ -67,7 +72,7 @@ public class IssueController {
         return "update"; // メモの編集画面へ遷移
     }
 
-//    イシュー更新機能（更新ロジック）
+    //    イシュー更新機能（更新ロジック）
     @PostMapping("/user/{userId}/issue/{issueId}/update")
     public String update(Authentication authentication,
                          @PathVariable("userId") Integer userId,
@@ -75,39 +80,36 @@ public class IssueController {
                          @RequestParam("title") String newTitle,
                          @RequestParam("content") String newContent,
                          @RequestParam("period") String newPeriod,
-                         @RequestParam("importance") char newImportance)
-    {
-    // 現在認証されているユーザー名を取得
-    String username = authentication.getName();
+                         @RequestParam("importance") char newImportance) {
+        // 現在認証されているユーザー名を取得
+        String username = authentication.getName();
 
-    // 該当のイシューとアカウントを取得
-    IssueEntity issue = issueRepository.findById(issueId).orElseThrow(() -> new EntityNotFoundException("Memo not found: " + issueId));
-    UserEntity user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("Memo not found: " + userId));
+        // 該当のイシューとアカウントを取得
+        IssueEntity issue = issueRepository.findById(issueId).orElseThrow(() -> new EntityNotFoundException("Memo not found: " + issueId));
+        UserEntity user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("Memo not found: " + userId));
 
-    // ユーザーチェック
-    if (user.getUsername().equals(username)) {
-        // イシューを更新
-        issue.setTitle(newTitle);
-        issue.setContent(newContent);
-        issue.setPeriod(newPeriod);
-        issue.setImportance(newImportance);
-        issueRepository.save(issue);
+        // ユーザーチェック
+        if (user.getUsername().equals(username)) {
+            // イシューを更新
+            issue.setTitle(newTitle);
+            issue.setContent(newContent);
+            issue.setPeriod(newPeriod);
+            issue.setImportance(newImportance);
+            issueRepository.save(issue);
+        } else {
+            // エラーメッセージを設定したり、エラーページにリダイレクトしたりします。
+        }
+
+        // 更新後のページにリダイレクト
+
+        return "redirect:/issue/{issueId}";
     }
-    else {
-        // エラーメッセージを設定したり、エラーページにリダイレクトしたりします。
-    }
 
-    // 更新後のページにリダイレクト
-
-    return "redirect:/issue/{issueId}";
-}
-
-//    イシュー削除機能
+    //    イシュー削除機能
     @PostMapping("/user/{userId}/issue/{issueId}/delete")
     public String delete(Authentication authentication,
-                             @PathVariable("userId") Integer userId,
-                             @PathVariable("issueId") Integer issueId)
-    {
+                         @PathVariable("userId") Integer userId,
+                         @PathVariable("issueId") Integer issueId) {
         // 現在認証されているユーザー名を取得
         String username = authentication.getName();
 
@@ -120,8 +122,7 @@ public class IssueController {
             // イシューを削除
 
             issueRepository.deleteById(issueId);
-        }
-        else {
+        } else {
             // エラーメッセージを設定したり、エラーページにリダイレクトしたりします。
         }
 
@@ -130,21 +131,23 @@ public class IssueController {
         return "redirect:/";
     }
 
-//    イシュー詳細表示
+    //    イシュー詳細表示
     @GetMapping("/issue/{issueId}")
-    public String showIssueDetail(@PathVariable("issueId") Integer issueId,Model model){
+    public String showIssueDetail(@PathVariable("issueId") Integer issueId, @ModelAttribute("comment") CommentEntity comment, Model model) {
         IssueEntity issue = issueRepository.findById(issueId).orElseThrow(() -> new EntityNotFoundException("Memo not found: " + issueId));
-        model.addAttribute("issue",issue);
+        List<CommentEntity> comments = commentRepository.findByIssue_id(issueId);
+        model.addAttribute("issue", issue);
+        model.addAttribute("comments",comments);
         return "detail";
     }
 
-//    イシュー投稿ユーザー別一覧表示
+    //    イシュー投稿ユーザー別一覧表示
     @GetMapping("user/{userId}/issues")
-    public String getUserIssues(@PathVariable("userId") Integer userId, Model model){
+    public String getUserIssues(@PathVariable("userId") Integer userId, Model model) {
         UserEntity user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("Memo not found: " + userId));
         List<IssueEntity> issues = issueRepository.findByUser_Id(userId);
-        model.addAttribute("user",user);
-        model.addAttribute("issue",issues);
+        model.addAttribute("user", user);
+        model.addAttribute("issue", issues);
 
         return "userIssues";
     }
