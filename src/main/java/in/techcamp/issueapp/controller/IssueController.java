@@ -64,7 +64,7 @@ public class IssueController {
         model.addAttribute("user", user);
         model.addAttribute("issue", issue);
 
-        return "detail"; // メモの編集画面へ遷移
+        return "update"; // メモの編集画面へ遷移
     }
 
 //    イシュー更新機能（更新ロジック）
@@ -135,7 +135,7 @@ public class IssueController {
     public String showIssueDetail(@PathVariable("issueId") Integer issueId,Model model){
         IssueEntity issue = issueRepository.findById(issueId).orElseThrow(() -> new EntityNotFoundException("Memo not found: " + issueId));
         model.addAttribute("issue",issue);
-        return "issueDetail";
+        return "detail";
     }
 
 //    イシュー投稿ユーザー別一覧表示
