@@ -16,10 +16,10 @@
 
 <div th:replace="index.html :: issueList(${issue})"></div>
 
-<div th:if="${#authentication.name == issue.user.username}">
-  <a class="button" th:href="@{/user/{userId}/issue/{issueId}/edit(userId=${issue.user.id}, issueId=${issue.id})}">更新</a>
+<div class="button" th:if="${#authentication.name == issue.user.username}">
+  <a class="update-button" th:href="@{/user/{userId}/issue/{issueId}/edit(userId=${issue.user.id}, issueId=${issue.id})}">更新</a>
   <form th:action="@{/user/{userId}/issue/{issueId}/delete(userId=${issue.user.id}, issueId=${issue.id})}" method="post">
-    <input type="submit" value="削除">
+    <input class="delete-button" type="submit" value="削除">
   </form>
 </div>
 
