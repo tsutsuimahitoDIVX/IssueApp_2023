@@ -1,12 +1,12 @@
-create table if not exists issues (
-    id bigint not null auto_increment,
-    title varchar(256) not null,
-    content varchar(256) not null,
-    period varchar(256) not null,
-    importance varchar(256) not null,
-    user_id Integer not null,
-    primary key (id),
-    foreign key (user_id) references user(id)
+CREATE TABLE if NOT EXISTS issues (
+    id         INT       NOT NULL AUTO_INCREMENT,
+    title      VARCHAR(256) NOT NULL,
+    content    VARCHAR(256) NOT NULL,
+    period     VARCHAR(256) NOT NULL,
+    importance VARCHAR(256) NOT NULL,
+    user_id    Integer      NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (user_id) REFERENCES user(id)
  );
 
  CREATE TABLE IF NOT EXISTS user (
@@ -15,4 +15,14 @@ create table if not exists issues (
     password VARCHAR(512)    NOT NULL,
     PRIMARY KEY (id)
  );
+
+ CREATE TABLE IF NOT EXISTS comment (
+   id       INT          NOT NULL AUTO_INCREMENT,
+   message  VARCHAR(256) NOT NULL,
+   user_id  INTEGER      NOT NULL,
+   issue_id INTEGER      NOT NULL,
+   PRIMARY KEY (id),
+   FOREIGN KEY (user_id)  REFERENCES user(id),
+   FOREIGN KEY (issue_id) REFERENCES issues(id)
+  );
 
