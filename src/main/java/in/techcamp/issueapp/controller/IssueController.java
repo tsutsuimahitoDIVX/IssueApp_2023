@@ -1,7 +1,9 @@
 package in.techcamp.issueapp.controller;
 
+import in.techcamp.issueapp.entity.CommentEntity;
 import in.techcamp.issueapp.entity.IssueEntity;
 import in.techcamp.issueapp.entity.UserEntity;
+import in.techcamp.issueapp.repository.CommentRepository;
 import in.techcamp.issueapp.repository.IssueRepository;
 import in.techcamp.issueapp.repository.UserRepository;
 import in.techcamp.issueapp.service.IssueService;
@@ -24,6 +26,9 @@ public class IssueController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private CommentRepository commentRepository;
 
     @Autowired
     private IssueService issueService;
@@ -147,5 +152,23 @@ public class IssueController {
         model.addAttribute("issue",issues);
 
         return "userIssues";
+    }
+
+//    コメント投稿機能
+    @PostMapping("issue/{issueId}/comment")
+    public String postComment(Authentication authentication,
+                              CommentEntity comment,
+                              @PathVariable("issueId")Integer issueId){
+        String username = authentication.getName();
+        UserEntity user = userRepository.findByUsername(username);
+
+        IssueEntity issue = issueRepository.findById(issueId).orElseThrow(() -> new EntityNotFoundException("Memo not found: " + issueId));
+
+        comment.setUser(user);
+        comment.setIssue(issue);
+
+        commentRepository.save(comment);
+
+        return "redirect:/issue/{issueId}";
     }
 }
