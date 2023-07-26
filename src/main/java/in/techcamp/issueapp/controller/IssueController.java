@@ -28,6 +28,7 @@ public class IssueController {
     @Autowired
     private IssueService issueService;
 
+//    イシュー一覧表示
     @GetMapping("/")
     public String getIndex(Model model){
         List<IssueEntity> issueList = issueRepository.findAll();
@@ -35,12 +36,13 @@ public class IssueController {
         return "index";
     }
 
+//    イシュー投稿機能（フォーム画面遷移
     @GetMapping("/issueForm")
     public String showIssueForm(@ModelAttribute("issueEntity") IssueEntity issueEntity ){
         return "issueForm";
     }
 
-//    イシュー投稿機能
+//    イシュー投稿機能（ロジック
     @PostMapping("/issues")
     public String postIssue(@ModelAttribute("issueEntity")IssueEntity issueEntity, BindingResult result, Authentication authentication){
         User authenticatedUser = (User) authentication.getPrincipal();
@@ -97,7 +99,7 @@ public class IssueController {
 
     // 更新後のページにリダイレクト
 
-    return "redirect:/";
+    return "redirect:/issue/{issueId}";
 }
 
 //    イシュー削除機能
@@ -128,10 +130,22 @@ public class IssueController {
         return "redirect:/";
     }
 
+//    イシュー詳細表示
     @GetMapping("/issue/{issueId}")
     public String showIssueDetail(@PathVariable("issueId") Integer issueId,Model model){
         IssueEntity issue = issueRepository.findById(issueId).orElseThrow(() -> new EntityNotFoundException("Memo not found: " + issueId));
         model.addAttribute("issue",issue);
         return "issueDetail";
+    }
+
+//    イシュー投稿ユーザー別一覧表示
+    @GetMapping("user/{userId}/issues")
+    public String getUserIssues(@PathVariable("userId") Integer userId, Model model){
+        UserEntity user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("Memo not found: " + userId));
+        List<IssueEntity> issues = issueRepository.findByUser_Id(userId);
+        model.addAttribute("user",user);
+        model.addAttribute("issue",issues);
+
+        return "userIssues";
     }
 }

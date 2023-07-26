@@ -20,24 +20,21 @@
 
 <table class="issue-table" th:fragment="issueList(issue)">
   <tr>
+    <th>ID</th>
     <th>投稿者</th>
     <th>タイトル</th>
     <th>内容</th>
     <th>期限</th>
     <th>重要度</th>
-    <th class="header-delete">削除</th>
   </tr>
 
     <tr th:each="issue:${issue}">
-      <td th:text="${issue.user.getUsername()}"></td>
+      <td th:text="${issue.id}"></td>
+      <td><a th:text="${issue.user.getUsername()}" th:href="@{/user/{userId}/issues(userId=${issue.user.id})}"></a></td>
       <td><a th:text="${issue.getTitle()}" th:href="@{/issue/{issueId}(issueId=${issue.id})}"></a></td>
       <td th:text="${issue.getContent()}"></td>
       <td th:text="${issue.getPeriod()}"></td>
       <td th:text="${issue.getImportance()}"></td>
-      <td>
-        <form th:action="@{/user/{userId}/issue/{issueId}/delete(userId=${issue.user.id}, issueId=${issue.id})}" method="post">
-          <button type="submit">削除</button>
-        </form>
       </td>
     </tr>
   </form>
