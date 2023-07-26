@@ -8,6 +8,7 @@ import in.techcamp.issueapp.repository.IssueRepository;
 import in.techcamp.issueapp.repository.UserRepository;
 import in.techcamp.issueapp.service.IssueService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
@@ -49,11 +50,16 @@ public class IssueController {
 
     //    イシュー投稿機能（ロジック
     @PostMapping("/issues")
-    public String postIssue(@ModelAttribute("issueEntity") IssueEntity issueEntity, BindingResult result, Authentication authentication) {
+    public String postIssue(@Valid  @ModelAttribute("issueEntity") IssueEntity issueEntity, BindingResult result, Authentication authentication) {
         User authenticatedUser = (User) authentication.getPrincipal();
         String username = authenticatedUser.getUsername();
         UserEntity user = userRepository.findByUsername(username);
         issueEntity.setUser(user);
+
+        if (result.hasErrors()){
+            return"issueForm";
+        }
+
         issueService.createIssue(issueEntity);
         return "redirect:/";
     }
@@ -95,13 +101,12 @@ public class IssueController {
             issue.setContent(newContent);
             issue.setPeriod(newPeriod);
             issue.setImportance(newImportance);
+
             issueRepository.save(issue);
         } else {
             // エラーメッセージを設定したり、エラーページにリダイレクトしたりします。
         }
-
         // 更新後のページにリダイレクト
-
         return "redirect:/issue/{issueId}";
     }
 

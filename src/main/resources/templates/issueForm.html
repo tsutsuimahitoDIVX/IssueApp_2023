@@ -18,10 +18,12 @@
     <form th:action="@{/issues}" th:method="post" th:object="${issueEntity}">
         <div class="form_title">
             <h2 class="column-title">タイトル</h2>
+            <div th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
             <input type="text" id="title" th:field="*{title}" required="required">
         </div>
         <div class="form_content">
             <h2 class="column-title">内容</h2>
+            <div th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></div>
             <textarea id="content" th:field="*{content}" required="required"></textarea>
         </div>
 
