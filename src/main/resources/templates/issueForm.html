@@ -18,21 +18,26 @@
     <form th:action="@{/issues}" th:method="post" th:object="${issueEntity}">
         <div class="form_title">
             <h2 class="column-title">タイトル</h2>
-            <input type="text" id="title" th:field="*{title}">
+            <input type="text" id="title" th:field="*{title}" required="required">
         </div>
         <div class="form_content">
             <h2 class="column-title">内容</h2>
-            <textarea id="content" th:field="*{content}"></textarea>
+            <textarea id="content" th:field="*{content}" required="required"></textarea>
         </div>
 
         <div class="form_period">
             <h2 class="column-title">期限</h2>
-            <input type="date" id="period" th:field="*{period}">
+            <input type="date" id="period" th:field="*{period}" required="required">
         </div>
 
         <div class="form_importance">
             <h2 class="column-title">重要度</h2>
-            <input type="text" id="importance" th:field="*{importance}">
+            <select id="importance" th:field="*{importance}" required="required">
+                <option value="">選択してください</option>
+                <option value="低">低</option>
+                <option value="中">中</option>
+                <option value="高">高</option>
+            </select>
         </div>
 
         <div class="form_submit">

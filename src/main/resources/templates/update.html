@@ -30,8 +30,13 @@
         </div>
 
         <div class="form_importance">
-            <h2>重要度</h2>
-            <input type="text" id="importance" th:field="*{importance}">
+            <h2 class="column-title">重要度</h2>
+            <select id="importance" th:field="*{importance}" required="required">
+                <option value="">選択してください</option>
+                <option value="低">低</option>
+                <option value="中">中</option>
+                <option value="高">高</option>
+            </select>
         </div>
 
         <div class="form_submit">
