@@ -42,12 +42,17 @@ public class UserController {
 
 //    ユーザー新規登録（ロジック
     @PostMapping("/register")
-    public String register(@ModelAttribute("user") @Valid UserInput userInput, BindingResult result){
+    public String register(@ModelAttribute("user") @Valid UserInput userInput, BindingResult result,Model model){
         if (result.hasErrors()){
             return"register";
         }
 
-        userService.registerNewUser(userInput);
+        try {
+            userService.registerNewUser(userInput);
+        } catch (Exception e) {
+            model.addAttribute("errorMessage",e.getMessage());
+        }
+
         return "redirect:/";
     }
 

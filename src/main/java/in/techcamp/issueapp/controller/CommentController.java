@@ -8,6 +8,9 @@ import in.techcamp.issueapp.repository.IssueRepository;
 import in.techcamp.issueapp.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -64,7 +67,8 @@ public class CommentController {
     public String commentUpdate(@PathVariable("issueId")Integer issueId,
                                 @PathVariable("commentId")Integer commentId,
                                 @RequestParam("message") String newMessage,
-                                Authentication authentication) {
+                                Authentication authentication,
+                                Model model) {
         String username = authentication.getName();
         UserEntity user = userRepository.findByUsername(username);
         CommentEntity comment = commentRepository.findById(commentId).orElseThrow(() -> new EntityNotFoundException("Comment not found: " + commentId));
@@ -72,11 +76,18 @@ public class CommentController {
         if (user.getUsername().equals(username)) {
             // メモを更新
             comment.setMessage(newMessage);
-            commentRepository.save(comment);
+            try {
+                commentRepository.save(comment);
+            } catch (DataAccessException e) {
+                // データベース接続に失敗した場合の処理
+                model.addAttribute("errorMessage", "データベースへの接続に失敗しました。");
+                return "error";
+            }
+        } else {
+            model.addAttribute("errorMessage", "コメント投稿者と異なります！");
+            return "error";
         }
-        else {
-            // エラーメッセージを設定したり、エラーページにリダイレクトしたりします。
-        }
+
         // 更新後のページにリダイレクト
         return "redirect:/issue/{issueId}";
     }

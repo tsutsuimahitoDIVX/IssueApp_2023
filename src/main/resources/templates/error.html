@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
+  <title>イシュー詳細</title>
+</head>
+
+<body>
+
+<div th:insert="header :: header"></div>
+
+<div class="page-title">
+  <h1>Error!</h1>
+</div>
+
+<p th:text="${errorMessage}">Error details</p>
+
+</body>
+</html>

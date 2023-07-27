@@ -11,6 +11,8 @@ import in.techcamp.issueapp.service.IssueService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
@@ -51,7 +53,11 @@ public class IssueController {
 
     //    イシュー投稿機能（ロジック
     @PostMapping("/issues")
-    public String postIssue(@Valid  @ModelAttribute("issueEntity") IssueEntity issueEntity, BindingResult result, Authentication authentication) {
+    public String postIssue(@Valid  @ModelAttribute("issueEntity") IssueEntity issueEntity,
+                            BindingResult result,
+                            Authentication authentication,
+                            Model model)
+    {
         User authenticatedUser = (User) authentication.getPrincipal();
         String username = authenticatedUser.getUsername();
         UserEntity user = userRepository.findByUsername(username);
@@ -61,17 +67,28 @@ public class IssueController {
             return"issueForm";
         }
 
-        issueService.createIssue(issueEntity);
+        try {
+            issueService.createIssue(issueEntity);
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "error";
+        }
         return "redirect:/";
     }
 
     //    イシュー更新機能（画面遷移）
     @GetMapping("/user/{userId}/issue/{issueId}/edit")
     public String edit(@PathVariable Integer issueId, Model model) {
-//        UserEntity user = userRepository.findById(userId)
-//                .orElseThrow(() -> new IllegalArgumentException("User not found: " + userId));
-        IssueEntity issue = issueRepository.findById(issueId)
-                .orElseThrow(() -> new IllegalArgumentException("Issue not found: " + issueId));
+
+        IssueEntity issue;
+
+        try {
+            issue = issueRepository.findById(issueId)
+                    .orElseThrow(() -> new EntityNotFoundException("Issue not found: " + issueId));
+        } catch (EntityNotFoundException ex) {
+            model.addAttribute("errorMessage", ex.getMessage());
+            return "error";
+        }
 
 //       空白文字では更新できないバリデーション用
         IssueUpdateForm issueUpdateForm = new IssueUpdateForm();
@@ -80,12 +97,10 @@ public class IssueController {
         issueUpdateForm.setPeriod(issue.getPeriod());
         issueUpdateForm.setImportance(issue.getImportance());
 
-
-//        model.addAttribute("user", user);
         model.addAttribute("issue", issue);
         model.addAttribute("issueUpdateForm",issueUpdateForm);
 
-        return "update"; // メモの編集画面へ遷移
+        return "update";
     }
 
     //    イシュー更新機能（更新ロジック）
@@ -102,8 +117,16 @@ public class IssueController {
         String username = authentication.getName();
 
         // 該当のイシューとアカウントを取得
-        IssueEntity issue = issueRepository.findById(issueId).orElseThrow(() -> new EntityNotFoundException("Issue not found: " + issueId));
-        UserEntity user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found: " + userId));
+        IssueEntity issue;
+        UserEntity user;
+
+        try {
+            issue = issueRepository.findById(issueId).orElseThrow(() -> new EntityNotFoundException("Issue not found: " + issueId));
+            user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found: " + userId));
+        } catch (EntityNotFoundException ex) {
+            model.addAttribute("errorMessage", ex.getMessage());
+            return "error";
+        }
 
         if (result.hasErrors()){
             model.addAttribute("issue",issue);
@@ -114,49 +137,72 @@ public class IssueController {
         // ユーザーチェック
         if (user.getUsername().equals(username)) {
             // イシューを更新
-            issue.setTitle(issueUpdateForm.getTitle());
-            issue.setContent(issueUpdateForm.getContent());
-            issue.setPeriod(issueUpdateForm.getPeriod());
-            issue.setImportance(issueUpdateForm.getImportance());
+            try {
+                issue.setTitle(issueUpdateForm.getTitle());
+                issue.setContent(issueUpdateForm.getContent());
+                issue.setPeriod(issueUpdateForm.getPeriod());
+                issue.setImportance(issueUpdateForm.getImportance());
 
-            issueRepository.save(issue);
+                issueRepository.save(issue);
+            } catch (Exception e) {
+                model.addAttribute("errorMessage", e.getMessage());
+                return "error";
+            }
         } else {
-            // エラーメッセージを設定したり、エラーページにリダイレクトしたりします。
+            model.addAttribute("errorMessage", "イシューの投稿者と一致しません。");
+            return "error";
         }
         // 更新後のページにリダイレクト
-        return "redirect:/issue/{issueId}";
+        return "redirect:/issue/" + issueId;
     }
+
 
     //    イシュー削除機能
     @PostMapping("/user/{userId}/issue/{issueId}/delete")
     public String delete(Authentication authentication,
                          @PathVariable("userId") Integer userId,
-                         @PathVariable("issueId") Integer issueId) {
+                         @PathVariable("issueId") Integer issueId,
+                         Model model) {
         // 現在認証されているユーザー名を取得
         String username = authentication.getName();
 
         // 該当のメモとアカウントを取得
-        IssueEntity issue = issueRepository.findById(issueId).orElseThrow(() -> new EntityNotFoundException("Issue not found: " + issueId));
-        UserEntity user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found: " + userId));
+        UserEntity user;
 
+        try {
+            user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found: " + userId));
+        }  catch (EntityNotFoundException ex) {
+            model.addAttribute("errorMessage", ex.getMessage());
+            return "error";
+        }
         // ユーザーチェック
         if (user.getUsername().equals(username)) {
             // イシューを削除
-
-            issueRepository.deleteById(issueId);
+            try {
+                issueRepository.deleteById(issueId);
+            } catch (Exception e){
+                model.addAttribute("errorMessage",e.getMessage());
+                return "error";
+            }
         } else {
-            // エラーメッセージを設定したり、エラーページにリダイレクトしたりします。
+            model.addAttribute("errorMessage", "イシューの投稿者と一致しません。");
+            return "error";
         }
-
-        // 更新後のページにリダイレクト
-
         return "redirect:/";
     }
 
     //    イシュー詳細表示
     @GetMapping("/issue/{issueId}")
     public String showIssueDetail(@PathVariable("issueId") Integer issueId, @ModelAttribute("comment") CommentEntity comment, Model model) {
-        IssueEntity issue = issueRepository.findById(issueId).orElseThrow(() -> new EntityNotFoundException("Issue not found: " + issueId));
+        IssueEntity issue;
+
+        try {
+            issue = issueRepository.findById(issueId).orElseThrow(() -> new EntityNotFoundException("Issue not found: " + issueId));
+        } catch (EntityNotFoundException ex) {
+            model.addAttribute("errorMessage", ex.getMessage());
+            return "error";
+        }
+
         List<CommentEntity> comments = commentRepository.findByIssue_id(issueId);
         model.addAttribute("issue", issue);
         model.addAttribute("comments",comments);
@@ -166,7 +212,15 @@ public class IssueController {
     //    イシュー投稿ユーザー別一覧表示
     @GetMapping("user/{userId}/issues")
     public String getUserIssues(@PathVariable("userId") Integer userId, Model model) {
-        UserEntity user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found: " + userId));
+        UserEntity user;
+
+        try {
+            user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found: " + userId));
+        } catch (EntityNotFoundException ex) {
+            model.addAttribute("errorMessage", ex.getMessage());
+            return "error";
+        }
+
         List<IssueEntity> issues = issueRepository.findByUser_Id(userId);
         model.addAttribute("user", user);
         model.addAttribute("issue", issues);
