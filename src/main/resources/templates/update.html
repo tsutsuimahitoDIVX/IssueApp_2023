@@ -14,13 +14,15 @@
 </div>
 
 <div class="form">
-    <form action="#" th:action="@{/user/{userId}/issue/{issueId}/update(userId=${issue.user.id},issueId=${issue.getId()})}" th:method="post" th:object="${issue}">
+    <form action="#" th:action="@{/user/{userId}/issue/{issueId}/update(userId=${issue.user.id},issueId=${issue.getId()})}" th:method="post" th:object="${issueUpdateForm}">
         <div class="form_title">
             <h2>タイトル</h2>
+            <div th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
             <input type="text" id="title" th:field="*{title}">
         </div>
         <div class="form_content">
             <h2>内容</h2>
+            <div th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></div>
             <textarea id="content" th:field="*{content}"></textarea>
         </div>
 

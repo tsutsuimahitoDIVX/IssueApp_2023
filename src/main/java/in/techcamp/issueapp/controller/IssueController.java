@@ -1,5 +1,6 @@
 package in.techcamp.issueapp.controller;
 
+import in.techcamp.issueapp.IssueUpdateForm;
 import in.techcamp.issueapp.entity.CommentEntity;
 import in.techcamp.issueapp.entity.IssueEntity;
 import in.techcamp.issueapp.entity.UserEntity;
@@ -66,14 +67,23 @@ public class IssueController {
 
     //    イシュー更新機能（画面遷移）
     @GetMapping("/user/{userId}/issue/{issueId}/edit")
-    public String edit(@PathVariable Integer userId, @PathVariable Integer issueId, Model model) {
-        UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found: " + userId));
+    public String edit(@PathVariable Integer issueId, Model model) {
+//        UserEntity user = userRepository.findById(userId)
+//                .orElseThrow(() -> new IllegalArgumentException("User not found: " + userId));
         IssueEntity issue = issueRepository.findById(issueId)
                 .orElseThrow(() -> new IllegalArgumentException("Issue not found: " + issueId));
 
-        model.addAttribute("user", user);
+//       空白文字では更新できないバリデーション用
+        IssueUpdateForm issueUpdateForm = new IssueUpdateForm();
+        issueUpdateForm.setTitle(issue.getTitle());
+        issueUpdateForm.setContent(issue.getContent());
+        issueUpdateForm.setPeriod(issue.getPeriod());
+        issueUpdateForm.setImportance(issue.getImportance());
+
+
+//        model.addAttribute("user", user);
         model.addAttribute("issue", issue);
+        model.addAttribute("issueUpdateForm",issueUpdateForm);
 
         return "update"; // メモの編集画面へ遷移
     }
@@ -81,12 +91,13 @@ public class IssueController {
     //    イシュー更新機能（更新ロジック）
     @PostMapping("/user/{userId}/issue/{issueId}/update")
     public String update(Authentication authentication,
+                         @Valid IssueUpdateForm issueUpdateForm,
+                         BindingResult result,
                          @PathVariable("userId") Integer userId,
                          @PathVariable("issueId") Integer issueId,
-                         @RequestParam("title") String newTitle,
-                         @RequestParam("content") String newContent,
-                         @RequestParam("period") String newPeriod,
-                         @RequestParam("importance") char newImportance) {
+                         Model model
+                        ) {
+
         // 現在認証されているユーザー名を取得
         String username = authentication.getName();
 
@@ -94,13 +105,19 @@ public class IssueController {
         IssueEntity issue = issueRepository.findById(issueId).orElseThrow(() -> new EntityNotFoundException("Issue not found: " + issueId));
         UserEntity user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found: " + userId));
 
+        if (result.hasErrors()){
+            model.addAttribute("issue",issue);
+            model.addAttribute("issueUpdateForm",issueUpdateForm);
+            return"update";
+        }
+
         // ユーザーチェック
         if (user.getUsername().equals(username)) {
             // イシューを更新
-            issue.setTitle(newTitle);
-            issue.setContent(newContent);
-            issue.setPeriod(newPeriod);
-            issue.setImportance(newImportance);
+            issue.setTitle(issueUpdateForm.getTitle());
+            issue.setContent(issueUpdateForm.getContent());
+            issue.setPeriod(issueUpdateForm.getPeriod());
+            issue.setImportance(issueUpdateForm.getImportance());
 
             issueRepository.save(issue);
         } else {
