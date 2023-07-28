@@ -208,12 +208,6 @@ public class IssueController {
         model.addAttribute("issue", issue);
         model.addAttribute("comments",comments);
 
-//        if (model.containsAttribute("errors")) {
-//            List<ObjectError> errors = (List<ObjectError>) model.asMap().get("errors");
-//            // エラーメッセージを取り扱うロジック
-//        }
-
-
         return "detail";
     }
 

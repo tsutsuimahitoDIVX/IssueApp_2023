@@ -14,7 +14,7 @@
   <h1>イシュー詳細</h1>
 </div>
 
-<div th:replace="index.html :: issueList(${issue})"></div>
+<div th:replace="index :: issueList(${issue})"></div>
 
 <div class="button" th:if="${#authentication.name == issue.user.username}">
   <a class="update-button" th:href="@{/user/{userId}/issue/{issueId}/edit(userId=${issue.user.id}, issueId=${issue.id})}">更新</a>
@@ -23,43 +23,47 @@
   </form>
 </div>
 
-<div class="page-title">
-  <h2>コメント</h2>
-</div>
+<div th:replace="commentShow :: commentShow"></div>
 
-<table class="comment-table" th:fragment="commentList(comment)">
-  <tr>
-    <th>ID</th>
-    <th>投稿者</th>
-    <th>メッセージ</th>
-    <th>更新</th>
-    <th>削除</th>
-  </tr>
-  <tr th:each="comment:${comments}">
-    <td th:text="${comment.id}"></td>
-    <td th:text="${comment.user.username}"></td>
-    <td th:text="${comment.message}"></td>
-    <div th:if="${#authentication.name == comment.user.username}">
-      <td><a class="update-button" th:href="@{/issue/{issueId}/comment/{commentId}/edit(issueId=${issue.id},commentId=${comment.id})}">更新</a></td>
-      <form th:action="@{/issue/{issueId}/comment/{commentId}/delete(issueId=${issue.id},commentId=${comment.id})}" method="post">
-        <td><input class="delete-button" type="submit" value="削除"></td>
-      </form>
-    </div>
-  </tr>
-</table>
+<div th:replace="commentNew :: commentNew"></div>
 
-<div th:if="${#authentication.name != 'anonymousUser'}">
-  <!-- ログイン済みユーザーの場合のみ表示 -->
-  <form th:action="@{/issue/{issueId}/comment(issueId=${issue.id})}" th:method="post" th:object="${comment}">
-    <label>コメント</label>
-    <div th:if="${errors != null}" th:each="error : ${errors}">
-      <p th:text="${error.defaultMessage}"></p>
-    </div>
-    <input th:field="*{message}" type="text" required="required" >
-    <input type="submit" value="登録">
-  </form>
+<!--<div class="page-title">-->
+<!--  <h2>コメント</h2>-->
+<!--</div>-->
 
-</div>
+<!--<table class="comment-table" th:fragment="commentList(comment)">-->
+<!--  <tr>-->
+<!--    <th>ID</th>-->
+<!--    <th>投稿者</th>-->
+<!--    <th>メッセージ</th>-->
+<!--    <th>更新</th>-->
+<!--    <th>削除</th>-->
+<!--  </tr>-->
+<!--  <tr th:each="comment:${comments}">-->
+<!--    <td th:text="${comment.id}"></td>-->
+<!--    <td th:text="${comment.user.username}"></td>-->
+<!--    <td th:text="${comment.message}"></td>-->
+<!--    <div th:if="${#authentication.name == comment.user.username}">-->
+<!--      <td><a class="update-button" th:href="@{/issue/{issueId}/comment/{commentId}/edit(issueId=${issue.id},commentId=${comment.id})}">更新</a></td>-->
+<!--      <form th:action="@{/issue/{issueId}/comment/{commentId}/delete(issueId=${issue.id},commentId=${comment.id})}" method="post">-->
+<!--        <td><input class="delete-button" type="submit" value="削除"></td>-->
+<!--      </form>-->
+<!--    </div>-->
+<!--  </tr>-->
+<!--</table>-->
+
+<!--<div th:if="${#authentication.name != 'anonymousUser'}">-->
+<!--  &lt;!&ndash; ログイン済みユーザーの場合のみ表示 &ndash;&gt;-->
+<!--  <form th:action="@{/issue/{issueId}/comment(issueId=${issue.id})}" th:method="post" th:object="${comment}">-->
+<!--    <label>コメント</label>-->
+<!--    <div th:if="${errors != null}" th:each="error : ${errors}">-->
+<!--      <p th:text="${error.defaultMessage}"></p>-->
+<!--    </div>-->
+<!--    <input th:field="*{message}" type="text" required="required" >-->
+<!--    <input type="submit" value="登録">-->
+<!--  </form>-->
+
+<!--</div>-->
 
 </body>
 </html>

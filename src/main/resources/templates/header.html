@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <header>
     <div class="header-container">
@@ -6,7 +5,7 @@
 
         <!-- ログイン時 -->
         <div class="header-info"  th:if="${#authorization.expression('isAuthenticated()')}">
-            <p><span class="user-name" th:text="${#authentication?.name}"></span>さん</p>
+            <p class="user-name"><span  th:text="${#authentication?.name}"></span>さん</p>
             <form th:action="@{/logout}" method="post">
                 <input class="logout-button" type="submit" value="ログアウト"/>
             </form>
@@ -17,7 +16,5 @@
             <a class="header-button" th:href="@{/registerForm}">新規登録</a>
             <a class="header-button" th:href="@{/login}">ログイン</a>
         </div>
-
     </div>
 </header>
-</html>
