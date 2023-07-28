@@ -9,15 +9,48 @@
 
 <div th:insert="header :: header"></div>
 
+<div class="page-title">
+  <h1>ユーザー新規登録</h1>
+</div>
+
+<p th:if="${param.error}" class="login-error" th:text="${loginError}"></p>
+
+<div class="form">
+
 <form th:action="@{/register}" th:method="post" th:object="${user}">
 
-  <label for="username">ユーザー名</label>
-  <input th:field="*{username}" id="username" type="text">
-  <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
-  <label for="password">パスワード</label>
-  <input th:field="*{password}" id="password" type="password">
-  <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
-  <input type="submit" value="登録">
+  <div class="form_title">
+    <h2 class="column-title">名前</h2>
+    <div class="error-message" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
+    <input type="text" id="username" name="username" autofocus="autofocus" required="required" />
+  </div>
+
+  <div class="form_title">
+    <h2 class="column-title">パスワード</h2>
+    <div class="error-message" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+    <input type="password" id="password" name="password" required="required" />
+  </div>
+
+  <div class="form_submit">
+    <button type="submit">新規登録</button>
+  </div>
+
 </form>
+</div>
 </body>
 </html>
+
+
+
+
+
+<!--  <label for="username">ユーザー名</label>-->
+<!--  <input th:field="*{username}" id="username" type="text">-->
+<!--  <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>-->
+<!--  <label for="password">パスワード</label>-->
+<!--  <input th:field="*{password}" id="password" type="password">-->
+<!--  <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>-->
+<!--  <input type="submit" value="登録">-->
+<!--</form>-->
+<!--</body>-->
+<!--</html>-->

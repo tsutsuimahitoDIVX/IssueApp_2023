@@ -1,0 +1,21 @@
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="commentNew">
+
+<div class="new-comment-wrapper" th:if="${#authentication.name != 'anonymousUser'}">
+    <!-- ログイン済みユーザーの場合のみ表示 -->
+  <div class="comment-title">
+    <h2>コメントする</h2>
+  </div>
+
+  <form th:action="@{/issue/{issueId}/comment(issueId=${issue.id})}" th:method="post" th:object="${comment}">
+    <div class="comment-form-wrapper" >
+      <div th:if="${errors != null}" th:each="error : ${errors}">
+        <p class="error-message" th:text="${error.defaultMessage}"></p>
+      </div>
+
+      <textarea class="comment-form" id="message" th:field="*{message}" required="required" />
+      <div>
+        <button class="comment-submit" type="submit">登録</button>
+      </div>
+    </div>
+  </form>
+</div>

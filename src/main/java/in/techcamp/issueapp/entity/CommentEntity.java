@@ -12,7 +12,7 @@ public class CommentEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotBlank(message = "内容には空白文字のみの入力は許可されません。")
+    @NotBlank(message = "コメントには空白文字のみの入力は許可されません。")
     private String message;
 
     @ManyToOne
