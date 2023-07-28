@@ -18,6 +18,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -206,6 +207,13 @@ public class IssueController {
         List<CommentEntity> comments = commentRepository.findByIssue_id(issueId);
         model.addAttribute("issue", issue);
         model.addAttribute("comments",comments);
+
+//        if (model.containsAttribute("errors")) {
+//            List<ObjectError> errors = (List<ObjectError>) model.asMap().get("errors");
+//            // エラーメッセージを取り扱うロジック
+//        }
+
+
         return "detail";
     }
 

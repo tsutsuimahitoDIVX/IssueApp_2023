@@ -52,10 +52,13 @@
   <!-- ログイン済みユーザーの場合のみ表示 -->
   <form th:action="@{/issue/{issueId}/comment(issueId=${issue.id})}" th:method="post" th:object="${comment}">
     <label>コメント</label>
+    <div th:if="${errors != null}" th:each="error : ${errors}">
+      <p th:text="${error.defaultMessage}"></p>
+    </div>
     <input th:field="*{message}" type="text" required="required" >
-    <!--        <div th:if="${#fields.hasErrors('text')}" th:errors="*{text}"></div>-->
     <input type="submit" value="登録">
   </form>
+
 </div>
 
 </body>

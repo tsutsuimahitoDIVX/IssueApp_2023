@@ -1,6 +1,7 @@
 package in.techcamp.issueapp.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Entity
@@ -10,6 +11,8 @@ public class CommentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @NotBlank(message = "内容には空白文字のみの入力は許可されません。")
     private String message;
 
     @ManyToOne

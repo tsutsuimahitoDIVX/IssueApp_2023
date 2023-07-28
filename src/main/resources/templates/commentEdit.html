@@ -13,10 +13,12 @@
   <h2>コメント編集</h2>
 </div>
 
-  <form th:action="@{/issue/{issueId}/comment/{commentId}/update(issueId=${issue.id},commentId=${comment.id})}" th:method="post" th:object="${comment}">
+  <form th:action="@{/issue/{issueId}/comment/{commentId}/update(issueId=${issue.id},commentId=${comment.id})}" th:method="post" th:object="${commentUpdateForm}">
 　　<label>メッセージ</label>
+      <div th:if="${errors != null}" th:each="error : ${errors}">
+          <p th:text="${error.defaultMessage}"></p>
+      </div>
      <input th:field="*{message}" type="text" required="required">
-     <!--        <div th:if="${#fields.hasErrors('text')}" th:errors="*{text}"></div>-->
      <input type="submit" value="更新">
   </form>
 
