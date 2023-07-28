@@ -367,3 +367,10 @@ textarea:focus {
     background-color: #ffc0cb;
     border: 2px solid #ffb6c1;
 }
+
+/********************************************
+ error画面
+*********************************************/
+.error {
+    text-align: center;
+}
