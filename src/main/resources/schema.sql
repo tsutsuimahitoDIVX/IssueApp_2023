@@ -1,3 +1,10 @@
+CREATE TABLE IF NOT EXISTS user (
+    id       INT             NOT NULL AUTO_INCREMENT,
+    username VARCHAR(128)    NOT NULL UNIQUE,
+    password VARCHAR(512)    NOT NULL,
+    PRIMARY KEY (id)
+ );
+
 CREATE TABLE if NOT EXISTS issues (
     id         INT       NOT NULL AUTO_INCREMENT,
     title      VARCHAR(256) NOT NULL,
@@ -7,13 +14,6 @@ CREATE TABLE if NOT EXISTS issues (
     user_id    Integer      NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (user_id) REFERENCES user(id)
- );
-
- CREATE TABLE IF NOT EXISTS user (
-    id       INT             NOT NULL AUTO_INCREMENT,
-    username VARCHAR(128)    NOT NULL UNIQUE,
-    password VARCHAR(512)    NOT NULL,
-    PRIMARY KEY (id)
  );
 
  CREATE TABLE IF NOT EXISTS comment (
